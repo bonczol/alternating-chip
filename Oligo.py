@@ -3,12 +3,12 @@ class Oligo:
 		self.sequence = sequence
 		self.length = len(sequence)
 
-		def overlap_by_one(another_oligo):
-			if self.sequence[0:-3] == another_oligo.sequence[0:-3] or
-			   self.sequence[0:-3] == another_oligo.sequence[2:] or
-			   self.sequence[2:] == another_oligo.sequence[0:-3] or
-			   self.sequence[2:] == another_oligo.sequence[2:]:
-				return True
-			else:
-				return False
-			
+	def overlap(self, another_oligo, max_overlap):
+		offset = 0
+
+		while offset < self.length - 1 and offset / 2 <= max_overlap:
+			if self.sequence[offset:] == another_oligo.sequence[0:-offset]:
+				return offset / 2
+			offset += 2
+
+		return False
