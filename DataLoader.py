@@ -15,8 +15,9 @@ class DataLoader:
 		root = ElementTree.fromstring(response.content)
 
 		data = dict()
-		data["length"] = root.attrib["length"]
-		data["start_seq"] = root.attrib["start"]
+		data["len_DNA"] = int(root.attrib["length"])
+		data["start_seq"] = root.attrib["start"] + "A"
+		data["len_oligo"] = int(len(data["start_seq"])/ 2)
 		data["set1"] = [ Oligo(child.text) for child in root[0]]
 		data["set2"] = [ Oligo(child.text) for child in root[1]]
 
