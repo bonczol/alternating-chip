@@ -34,20 +34,6 @@ class Sequencer:
 		return "".join(DNA)
 
 
-	def getCandidates(self, graph, oligo):
-		return [candidate for candidate in graph[oligo] if candidate.visited == False]
-
-
-	def isValid(self, last_oligo, oligo):
-		return last_oligo.sequence[2:] + oligo.sequence[-1] in self.S2
-
-
-	def appendOligo(self, result_seq, path, oligo):
-		result_seq.append(oligo.sequence[-1])
-		path.append(oligo)
-		oligo.visited = True
-
-
 	def construct_graph(self):
 		graph = defaultdict(list)
 
@@ -92,7 +78,21 @@ class Sequencer:
 		return node
 
 
+	def getCandidates(self, graph, oligo):
+		return [candidate for candidate in graph[oligo] if candidate.visited == False]
+
+
+	def isValid(self, last_oligo, oligo):
+		return last_oligo.sequence[2:] + oligo.sequence[-1] in self.S2
+
+
+	def appendOligo(self, result_seq, path, oligo):
+		result_seq.append(oligo.sequence[-1])
+		path.append(oligo)
+		oligo.visited = True
+
+
 	def show_params(self):
 		print("DNA length:", self.n)
 		print("Oligo length:", self.k)
-		print("Starting sequence:", self.start, " length:", len(self.start))
+		print("Starting sequence:", self.start)
