@@ -7,8 +7,10 @@ class DataLoader:
 	def __init__(self, URL):
 		self.URL = URL;
 
+
 	def sendRequest(self):
 		 return requests.get(self.URL)
+	
 	
 	def getData(self):
 		response = self.sendRequest()
@@ -16,10 +18,10 @@ class DataLoader:
 
 		data = dict()
 		data["len_DNA"] = int(root.attrib["length"])
-		data["start_seq"] = root.attrib["start"] + "A"
-		data["len_oligo"] = int(len(data["start_seq"])/ 2)
+		data["start_seq"] = root.attrib["start"]
+		data["len_oligo"] = int((len(data["start_seq"]) + 1)/ 2)
 		data["set1"] = [ Oligo(child.text) for child in root[0]]
-		data["set2"] = [ Oligo(child.text) for child in root[1]]
+		data["set2"] = [ child.text for child in root[1]]
 
 		return data
 
