@@ -23,15 +23,12 @@ class Sequencer:
 		while len(DNA) < max_steps:
 			curr_oligo = curr_path[-1]
 			last_oligo = last_path[-1]
-
-			print("DNA", DNA)
-
 			candidates = self.getCandidates(graph, curr_oligo)
 
 			for candidate in candidates:
-				if self.isValid(last_oligo, curr_oligo):
+				if self.isValid(last_oligo, candidate):
 					self.appendOligo(DNA, curr_path, candidate)
-					curr_path, last_path = last_path , curr_path
+					curr_path, last_path = last_path, curr_path
 					break;
 
 		return "".join(DNA)
@@ -41,13 +38,13 @@ class Sequencer:
 		return [candidate for candidate in graph[oligo] if candidate.visited == False]
 
 
-	def isValid(self, last_o, cand_o):
-		return (last_o.sequence[2:] + cand_o.sequence[-1]) in self.S2
+	def isValid(self, last_oligo, oligo):
+		return last_oligo.sequence[2:] + oligo.sequence[-1] in self.S2
 
 
 	def appendOligo(self, result_seq, path, oligo):
 		result_seq.append(oligo.sequence[-1])
-		current_path.append(oligo)
+		path.append(oligo)
 		oligo.visited = True
 
 
