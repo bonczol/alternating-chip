@@ -4,6 +4,7 @@ class Oligo:
 		self.length = len(sequence)
 		self.visited = False
 
+
 	def overlap(self, another_oligo, max_overlap):
 		offset = 0
 

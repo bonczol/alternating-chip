@@ -11,35 +11,27 @@ class Sequencer:
 
 
 	def run(self):
-		self.show_params()
-
 		graph = self.construct_graph()
-		print(len(graph.items()))
-		[print(key.sequence, [v.sequence for v in value]) for key, value in graph.items()]
-		print(self.get_start_seq("odd"), self.get_start_seq("even"))
-
 		curr_path = [self.find_oligo(graph, self.get_start_seq("odd"))] # Initialized as odd path
-		last_path = [self.find_oligo(graph, self.get_start_seq("even"))] # Initialized as even path
+		last_path = [self.find_unfinished_oligo(graph, self.get_start_seq("even"))] # Initialized as even path
 		DNA = []
 
-		# print("curr_path", curr_path)
-		# print("last_path", last_path)
+		self.show_params()
 
-		while len(DNA) <= self.n:
-			candidates = [oligo for oligo in graph[curr_path[-1]] if oligo.visited == False]
+		max_steps = self.n - (2*self.k - 1) - 1
 
-			# print("Candidates:", candidates)
+		while len(DNA) < max_steps:
+			curr_oligo = curr_path[-1]
+			last_oligo = last_path[-1]
+			candidates = self.getCandidates(graph, curr_oligo)
 
 			for candidate in candidates:
-				if last_path[-1].sequence[1:] + candidate.sequence[-1] in S2:
-					# print("Validation succes:", last_path[-1][1:] + candidate.sequence[-1])
-					curr_path[-1].visited = True
-					DNA.append(candidate.sequence)
-					curr_path.append(candidate)
-					curr_path, last_path = curr_path, last_path 
+				if self.isValid(last_oligo, candidate):
+					self.appendOligo(DNA, curr_path, candidate)
+					curr_path, last_path = last_path, curr_path
 					break;
 
-		return DNA
+		return "".join(DNA)
 
 
 	def construct_graph(self):
@@ -55,13 +47,13 @@ class Sequencer:
 
 	def get_start_seq(self, parity="odd"):
 		if parity == "odd":
-			node = list(self.start[0:-1])
+			node = list(self.start[0:])
 		else:
-			node = list(self.start[1:])
+			node = list(self.start[1:-1])
 			
-		for i in range(0, 2*self.k - 1):
+		for i in range(0, len(node)):
 			if i % 2 == 1:
-				node[i] = "x"
+				node[i] = "X"
 					
 		return "".join(node)
 
@@ -71,7 +63,33 @@ class Sequencer:
 			if oligo.sequence == sequence:
 				return oligo;
 
-		return None;
+		return None
+
+
+	def find_unfinished_oligo(self, graph, sequence):
+		nucleobases = ['A','C','T','G']
+		node = None
+
+		for n in nucleobases:
+			node = self.find_oligo(graph, sequence + 'X' + n)
+			if node != None:
+				break
+
+		return node
+
+
+	def getCandidates(self, graph, oligo):
+		return [candidate for candidate in graph[oligo] if candidate.visited == False]
+
+
+	def isValid(self, last_oligo, oligo):
+		return last_oligo.sequence[2:] + oligo.sequence[-1] in self.S2
+
+
+	def appendOligo(self, result_seq, path, oligo):
+		result_seq.append(oligo.sequence[-1])
+		path.append(oligo)
+		oligo.visited = True
 
 
 	def show_params(self):
