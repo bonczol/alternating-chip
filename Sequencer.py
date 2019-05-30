@@ -15,25 +15,26 @@ class Sequencer:
         curr_path = [self.find_oligo(graph, self.get_start_seq("odd"))] # Initialized as odd path
         last_path = [self.find_unfinished_oligo(graph, self.get_start_seq("even"))] # Initialized as even path
         odd, even = curr_path, last_path
-        DNA = []
 
         self.show_params()
 
+        i = 0
         max_steps = self.n - (2*self.k - 1) - 1
-
-        while len(DNA) < max_steps:
+    
+        while i < max_steps:
             curr_oligo = curr_path[-1]
             last_oligo = last_path[-1]
             candidates = self.getCandidates(graph, curr_oligo)
 
             for candidate in candidates:
                 if self.isValid(last_oligo, candidate):
-                    self.appendOligo(DNA, curr_path, candidate)
+                    self.appendOligo(curr_path, candidate)
                     curr_path, last_path = last_path, curr_path
+                    i += 1
                     break;
-        print(odd)
-        print(even)
-        return "".join(DNA), odd, even
+        #print(odd)
+        #print(even)
+        return self.translate(odd, even), odd, even
 
 
     def construct_graph(self):
@@ -88,11 +89,27 @@ class Sequencer:
         return last_oligo.sequence[2:] + oligo.sequence[-1] in self.S2
 
 
-    def appendOligo(self, result_seq, path, oligo):
-        result_seq.append(oligo.sequence[-1])
+    def appendOligo(self, path, oligo):
         path.append(oligo)
         oligo.visited = True
 
+
+    def translate(self, odd, even):
+        result_odd = list(odd[0].sequence)
+        result_even = list(even[0].sequence)
+
+        for i in range(1, len(odd)):
+            result_odd.extend(list(odd[i].sequence[-2:]))
+            result_even.extend(list(even[i].sequence[-2:]))
+
+        result = []
+        for i in range(0, len(result_odd), 2):
+            result.append(result_odd[i])
+            result.append(result_even[i])
+
+        print("Result length:", len(result))
+        return "".join(result)
+            
 
     def show_params(self):
         print("DNA length:", self.n)
