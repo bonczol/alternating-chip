@@ -4,11 +4,11 @@ class Oligo:
         self.length = len(sequence)
         self.visited = False
 
-    def __str__(self):
-        return str(self.sequence)
+    #def __str__(self):
+    #    return str(self.sequence)
 
-    def __repr__(self):
-        return str(self.sequence)
+    #def __repr__(self):
+    #    return str(self.sequence)
 
     def overlap(self, another_oligo, max_overlap):
         offset = 0
@@ -19,3 +19,4 @@ class Oligo:
             offset += 2
 
         return False
+
