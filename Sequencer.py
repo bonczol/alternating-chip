@@ -16,7 +16,7 @@ class Sequencer:
         last_path = [self.find_unfinished_oligo(graph, self.get_start_seq("even"))] # Initialized as even path
         odd, even = curr_path, last_path
 
-        self.show_params()
+        #self.show_params()
 
         i = 0
         max_steps = self.n - (2*self.k - 1) - 1
@@ -31,7 +31,7 @@ class Sequencer:
                     self.appendOligo(curr_path, candidate)
                     curr_path, last_path = last_path, curr_path
                     i += 1
-                    break;
+                    break
         #print(odd)
         #print(even)
         return self.translate(odd, even), odd, even
@@ -64,7 +64,7 @@ class Sequencer:
     def find_oligo(self, graph, sequence):
         for oligo in graph:
             if oligo.sequence == sequence:
-                return oligo;
+                return oligo
 
         return None
 

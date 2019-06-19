@@ -21,12 +21,12 @@ class Randomer:
             if s[:-1] == start_even:
                 even.append(s)
                 visited.append(s)
-        while len(visited) < length:     #length//2 is arbitrary
-            temp = random.choice(S1)
+        for i in range(0, 2*length//len(S1[0].sequence)):     #length//2 is arbitrary
+            temp = S1[i].sequence
             if temp not in visited:
                 visited.append(temp)
                 current.append(temp)
-                current = (odd, even)[current[0] == odd[0]]
+                current = (odd, even)[i%2]
         return (odd, even)
 
 
