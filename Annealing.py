@@ -79,7 +79,8 @@ class Annealing:
         odd, even = self.best_found
         c = 100*sum([1/max(overlap(odd[i], odd[i+1]), 1)**2 for i in range(len(odd) -1)])/len(odd)
         d = 100*sum([1/max(overlap(even[i], even[i+1]), 1)**2 for i in range(len(even) -1)])/len(even)
-        return odd, even, c, d, self.best_val
+        final_solution = self.construct_final_solution()
+        return final_solution, odd, even, c, d, self.best_val
 
     #-----------------------------------------------------------------------------
     #--------------------------Temperature schedule and decision------------------
@@ -327,6 +328,24 @@ class Annealing:
                 if distance not in self.dist[o1]: self.dist[o1][distance] = []
                 self.dist[o1][distance].append(oli_i)
         return d
+
+    def construct_final_solution(self):
+        odd, even = self.best_found
+        odd_str, even_str = odd[0], even[0]
+        for i in range(1, len(odd)):
+            ov = max(2*overlap(odd[i-1], odd[i])-1, 0)
+            if ov == 0: odd_str += 'X'
+            odd_str += odd[i][ov:]
+        for i in range(1, len(even)):
+            ov = max(2*overlap(even[i-1], even[i])-1, 0)
+            if ov == 0: even_str += 'X'
+            even_str += even[i][ov:]
+        result = ''
+        for i, (o, e) in enumerate(zip(odd_str, even_str)):
+            result += (o+e, '')[i%2]
+        return result
+
+
 
 
 

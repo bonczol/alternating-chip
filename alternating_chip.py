@@ -38,11 +38,13 @@ def main():
                         cooling_factor,
                         exponential_coef,
                         clustering_factor)
-        res_odd, res_even, cluster_odd, cluster_even, best_val = ann.run()
-        print("Ścieżka nieparzysta:")
-        print(res_odd)
-        print("Ścieżka parzysta:")
-        print(res_even)
+        ann_solution, res_odd, res_even, cluster_odd, cluster_even, best_val = ann.run()
+        #print("Ścieżka nieparzysta:")
+        #print(res_odd)
+        #print("Ścieżka parzysta:")
+        #print(res_even)
+        print("Simulated annealing solution:")
+        print(ann_solution)
 
 def oli2seq(ls):
     ret = []
